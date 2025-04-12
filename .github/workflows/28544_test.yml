@@ -21,7 +21,7 @@ jobs:
       - name: check for openCV_test.py
         id: check  # ID used to reference outputs in later jobs
         run: |
-          if [ -f openCV_testa.py ]; then
+          if [ -f openCV_test.py ]; then
             echo "Test file found."
             echo "error_exists=false" >> $GITHUB_OUTPUT  # Set output variable
           else
