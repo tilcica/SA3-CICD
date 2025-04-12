@@ -4,7 +4,7 @@ name: 28544_test
 # This workflow runs every time code is pushed to the 'main' branch
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
   # First job: Check if the test file exists
