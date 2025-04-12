@@ -19,7 +19,6 @@ def doloci_barvo_koze(slika, spodnjaMeja = np.array([0, 0, 0]), zgornjaMeja = np
 def zmanjsaj_sliko(slika,sirina,visina):
     pomanjsana_slika = cv2.resize(slika, (sirina, visina))
     return pomanjsana_slika
-    return cv2.flip(pomanjsana_slika, 1)
 
 def obdelaj_sliko_s_skatlami(slika, sirina_skatle, visina_skatle, barva_koze):
     subBoxes = []
@@ -38,16 +37,13 @@ def prestej_piksle_z_barvo_koze(slika, barva_koze):
     return cv2.countNonZero(mask)
 
 def main():
-    #cap = cv2.VideoCapture(0)
     window_name = "ORV vaja 1"
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     spodnjaMeja = np.array([0, 0, 0])
     zgornjaMeja = np.array([255, 255, 255])
     prev_time = time.time()
     while True:
-        #success, img = cap.read()
-
-        img = cv2.imread("smiley.png")
+        img = cv2.imread("test.png")
         img = zmanjsaj_sliko(img, 260, 300)
         cv2.waitKey(10)
 
@@ -64,8 +60,6 @@ def main():
         current_time = time.time()
         fps = 1 / (current_time - prev_time)
         prev_time = current_time
-
-        cv2.putText(img, f"FPS: {fps:.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
         cv2.imshow(window_name, img)
         if cv2.waitKey(1) & 0xFF == ord('q'):
