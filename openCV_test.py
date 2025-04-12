@@ -31,3 +31,5 @@ class TestOpenCVFunctions(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+   #  your_project/.github/workflows/28544_deploy.yml
