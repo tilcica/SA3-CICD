@@ -33,7 +33,7 @@ jobs:
       # Step 3: Upload the napaka.txt file as an artifact (available to next job)
       - name: upload napaka.txt
         if: always()  # Always run this step, even if previous one failed
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: napaka
           path: napaka.txt
@@ -57,7 +57,7 @@ jobs:
 
       # Step 2: Download the error artifact created in the previous job
       - name: download napaka.txt
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: napaka
         continue-on-error: true  # Ignore if file is missing (safe fallback)
