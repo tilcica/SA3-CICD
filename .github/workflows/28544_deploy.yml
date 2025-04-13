@@ -25,9 +25,9 @@ jobs:
       # Step 3: Build Docker image
       - name: docker build
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/opencv-project:latest .
+          docker build -t tilcica/opencv-project:latest .
 
       # Step 4: Push Docker image to DockerHub
       - name: docker push
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/opencv-project:latest
+          docker push tilcica/opencv-project:latest
