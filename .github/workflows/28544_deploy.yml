@@ -1,29 +1,33 @@
-name: 28544_deploy
+name: 28544_deploy # ime workflowa
 
 on:
   workflow_run:
-    workflows: ["28544_test"]
+    workflows: ["28544_test"] # se sproži po končanem workflowu 28544_test
     types: ["completed"]
 
 jobs:
   buildAndPush:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} # preveri, da je bil prejšen workflow uspešen
+    runs-on: ubuntu-latest # operacijski sistem, na katerem se bo izvajal workflow
 
     steps:
-      - name: checkout
+      # se premakne na kodo
+      - name: checkout 
         uses: actions/checkout@v3
-
-      - name: docker login
+        
+      # prijava v docker
+      - name: docker login 
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      # naredi docker image
       - name: docker build
         run: |
           docker build -t tilcica/sa3-cicd:latest .
 
+      # docker image objavi na dockerhub
       - name: docker push
         run: |
           docker push tilcica/sa3-cicd:latest

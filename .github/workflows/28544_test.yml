@@ -1,22 +1,23 @@
-
-name: 28544_test
+name: 28544_test # ime workflowa
 
 on:
   push:
-    branches: [master]
+    branches: [master] # se požene ob vsakem push na master (ni main ker sem mel nekaj problemov s tem)
 
 jobs:
-  checkTests:
+  checkTests: # preveri če obstaja testna datoteka
     name: check if test file exists
     runs-on: ubuntu-latest
 
-    outputs:
+    outputs: # definira kaj je output tega joba
       error_exists: ${{ steps.check.outputs.error_exists }}
 
     steps:
+      # se premakne na kodo
       - name: checkout
         uses: actions/checkout@v3
 
+      # preveri če obstaja testna datoteka
       - name: check for openCV_test.py
         id: check
         run: |
@@ -29,6 +30,7 @@ jobs:
             echo "error_exists=true" >> $GITHUB_OUTPUT
           fi
 
+      # lokalno objavi "napaka.txt" datoteko
       - name: upload napaka.txt
         if: always()
         uses: actions/upload-artifact@v4
@@ -36,43 +38,43 @@ jobs:
           name: napaka
           path: napaka.txt
 
-  runTests:
+  runTests: # pozene teste
     name: run tests
-    needs: checkTests
-    if: needs.checkTests.outputs.error_exists == 'false' 
+    needs: checkTests # rabi najprej izvest checkTests
+    if: needs.checkTests.outputs.error_exists == 'false' # checkTests mora biti uspesen
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        pythonVersion: [3.10, 3.13]
+        pythonVersion: [3.10, 3.13] # različice python-a, ki jih testiramo
 
     steps:
-      - name: checkout
+      - name: checkout # se premakne na kodo
         uses: actions/checkout@v3
 
-      - name: download napaka.txt
+      - name: download napaka.txt # lokalno prenese napaka.txt datoteko
         uses: actions/download-artifact@v4
         with:
           name: napaka
-        continue-on-error: true
+        continue-on-error: true # v primeru, da napaka.txt ne obstaja, nadaljuje z workflow-om
 
-      - name: set up python
+      - name: set up python # nastavi python
         uses: actions/setup-python@v4
         with:
           pythonVersion: ${{ matrix.python-version }}
 
-      - name: dependencies
+      - name: dependencies # namesti dependencies
         run: |
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: run tests
+      - name: run tests # požene datoteko s testi
         run: |
           if grep -q "not found" napaka.txt; then
             echo "Error found in napaka.txt. Exiting."
             exit 1  # Fail the job if there's an error
           else
             echo "Running unit tests..."
-                  if ! python -m unittest openCV_test.py; then
+                  if ! python -m unittest openCV_test.py; then 
                     echo "Unit tests failed. Exiting."
                     exit 1  # Fail the job if tests fail
                   fi
