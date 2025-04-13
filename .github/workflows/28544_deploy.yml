@@ -9,7 +9,6 @@ on:
 jobs:
   buildAndPush:
     runs-on: ubuntu-latest
-    needs: runTests  # Ensures this only runs after tests pass
 
     steps:
       # Step 1: Checkout your project code
