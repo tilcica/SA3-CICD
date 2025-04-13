@@ -1,25 +1,21 @@
-# Workflow name shown in GitHub Actions UI
+
 name: 28544_test
 
-# This workflow runs every time code is pushed to the 'main' branch
 on:
   push:
     branches: [master]
 
 jobs:
-  # First job: Check if the test file exists
   checkTests:
     name: check if test file exists
-    runs-on: ubuntu-latest  # Use the latest Ubuntu virtual machine
+    runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the latest code from the repo
       - name: checkout
         uses: actions/checkout@v3
 
-      # Step 2: Check if the test file 'openCV_test.py' exists
       - name: check for openCV_test.py
-        id: check  # ID used to reference outputs in later jobs
+        id: check
         run: |
           if [ -f openCV_test.py ]; then
             echo "Test file found."
@@ -30,50 +26,42 @@ jobs:
             echo "error_exists=true" >> $GITHUB_OUTPUT   # Set output variable
           fi
 
-      # Step 3: Upload the napaka.txt file as an artifact (available to next job)
       - name: upload napaka.txt
-        if: always()  # Always run this step, even if previous one failed
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: napaka
           path: napaka.txt
 
-  # Second job: Run the tests (only if the first job succeeded)
   runTests:
     name: run tests
-    needs: checkTests  # Depends on the previous job
-    if: needs.checkTests.outputs.error_exists == 'false'  # Only run if no errors
+    needs: checkTests
+    if: needs.checkTests.outputs.error_exists == 'false' 
     runs-on: ubuntu-latest
 
-    # Matrix allows running the same job across different Python versions
     strategy:
       matrix:
         pythonVersion: [3.8, 3.10]
 
     steps:
-      # Step 1: Checkout the code again (each job runs in a new environment)
       - name: checkout
         uses: actions/checkout@v3
 
-      # Step 2: Download the error artifact created in the previous job
       - name: download napaka.txt
         uses: actions/download-artifact@v4
         with:
           name: napaka
-        continue-on-error: true  # Ignore if file is missing (safe fallback)
+        continue-on-error: true
 
-      # Step 3: Set up the selected Python version from the matrix
       - name: set up python
         uses: actions/setup-python@v4
         with:
           pythonVersion: ${{ matrix.python-version }}
 
-      # Step 4: Install dependencies (if a requirements.txt file exists)
       - name: dependencies
         run: |
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      # Step 5: Run the unit tests using the unittest framework
       - name: run tests
         run: |
           if grep -q "not found" napaka.txt; then

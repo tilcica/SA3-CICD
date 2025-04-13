@@ -11,23 +11,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout your project code
       - name: checkout
         uses: actions/checkout@v3
 
-      # Step 2: Log in to DockerHub using secrets
       - name: docker login
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 3: Build Docker image
       - name: docker build
         run: |
-          docker build -t tilcica/opencv-project:latest .
+          docker build -t tilcica/sa3-cicd:latest .
 
-      # Step 4: Push Docker image to DockerHub
       - name: docker push
         run: |
-          docker push tilcica/opencv-project:latest
+          docker push tilcica/sa3-cicd:latest

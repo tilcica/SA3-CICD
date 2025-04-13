@@ -29,7 +29,8 @@ class TestOpenCVFunctions(unittest.TestCase):
         self.assertEqual(resized_img.shape[0], 100)
         self.assertEqual(resized_img.shape[1], 100)
 
+    def fail(self):
+        self.assertEqual(1, 0, "Test failed.")
+
 if __name__ == '__main__':
     unittest.main()
-
-   #  your_project/.github/workflows/28544_deploy.yml
