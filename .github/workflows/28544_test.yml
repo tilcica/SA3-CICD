@@ -69,5 +69,8 @@ jobs:
             exit 1  # Fail the job if there's an error
           else
             echo "Running unit tests..."
-            python -m unittest openCV_test.py  # Run your test file
+                  if ! python -m unittest openCV_test.py; then
+                    echo "Unit tests failed. Exiting."
+                    exit 1  # Fail the job if tests fail
+                  fi
           fi
