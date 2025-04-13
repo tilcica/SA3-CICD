@@ -3,8 +3,7 @@ name: 28544_deploy
 on:
   workflow_run:
     workflows: ["28544_test"]
-    types:
-      -completed
+    types: ["completed"]
 
 jobs:
   buildAndPush:
@@ -31,5 +30,3 @@ jobs:
       - name: docker push
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/opencv-project:latest
-
-#test
