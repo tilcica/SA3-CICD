@@ -7,6 +7,7 @@ on:
 
 jobs:
   buildAndPush:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -29,4 +30,4 @@ jobs:
       # Step 4: Push Docker image to DockerHub
       - name: docker push
         run: |
-          docker push ${{ secrets.DOCKER_PASSWORD }}/opencv-project:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/opencv-project:latest
