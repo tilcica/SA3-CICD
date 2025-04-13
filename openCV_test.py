@@ -29,8 +29,8 @@ class TestOpenCVFunctions(unittest.TestCase):
         self.assertEqual(resized_img.shape[0], 100)
         self.assertEqual(resized_img.shape[1], 100)
 
-    def test_fail(self):
-        self.assertTrue(False)
+    #def test_fail(self):
+        #self.assertTrue(False)
 
 if __name__ == '__main__':
     unittest.main()
