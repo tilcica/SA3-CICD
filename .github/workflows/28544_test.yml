@@ -10,6 +10,9 @@ jobs:
     name: check if test file exists
     runs-on: ubuntu-latest
 
+    outputs:
+      error_exists: ${{ steps.check.outputs.error_exists }}
+
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -19,11 +22,11 @@ jobs:
         run: |
           if [ -f openCV_test.py ]; then
             echo "Test file found."
-            echo "error_exists=false" >> $GITHUB_OUTPUT  # Set output variable
+            echo "error_exists=false" >> $GITHUB_OUTPUT
           else
             echo "Test file 'openCV_test.py' not found!" 1>&2
-            echo "Test file not found!" > napaka.txt     # Save error to file
-            echo "error_exists=true" >> $GITHUB_OUTPUT   # Set output variable
+            echo "Test file not found!" > napaka.txt
+            echo "error_exists=true" >> $GITHUB_OUTPUT
           fi
 
       - name: upload napaka.txt
